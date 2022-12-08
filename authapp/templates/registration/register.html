@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="row justify-content-center my-2">
+  <form method="post" enctype="multipart/form-data"></form>
+    {% csrf_token %}
+    {{ form.as_p }}
+<!-- <div class="row justify-content-center my-2">
   <div class="col-lg-6">
     <h3>Регистрация нового пользователя</h3>
     <form method="post" class="mt-2" enctype="multipart/form-data">
@@ -73,7 +75,7 @@
         <div class=""> <input type="text" name="email" maxlength="256"
             class="textinput textInput form-control" required="" id="id_email">
         </div>
-      </div>
+      </div> -->
 
       <button type="submit"
         class="btn btn-primary btn-block">Зарегистрироваться</button>
