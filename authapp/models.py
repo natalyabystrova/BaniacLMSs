@@ -51,8 +51,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         _("active"),
         default=True,
         help_text=_(
-            "Designates whether this user should be treated as active. \
-            Unselect this instead of deleting accounts."
+            "Required. 150 characters or fewer. ASCII letters and digits only."
         ),
     )
     date_joined = models.DateTimeField(_("date joined"), auto_now_add=True)
