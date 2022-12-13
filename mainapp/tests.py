@@ -1,6 +1,4 @@
 from http import HTTPStatus
-import pickle
-from unittest import mock
 
 from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -12,6 +10,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from django.core import mail as django_mail
 
 from mainapp import tasks as mainapp_tasks
+
+import pickle
+from unittest import mock
 
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -29,10 +30,8 @@ class TestNewsPage(TestCase):
     def setUp(self):
         super().setUp()
         self.client_with_auth = Client()
-        self.user_admin = authapp_models.CustomUser.objects.get(
-            username="admin")
-        self.client_with_auth.force_login(
-            self.user_admin, backend="django.contrib.auth.backends.ModelBackend")
+        self.user_admin = authapp_models.CustomUser.objects.get(username="admin")
+        self.client_with_auth.force_login(self.user_admin, backend="django.contrib.auth.backends.ModelBackend")
 
     def test_page_open_list(self):
         path = reverse("mainapp:news")
@@ -110,7 +109,7 @@ class TestNewsPage(TestCase):
         news_obj.refresh_from_db()
         self.assertTrue(news_obj.deleted)
 
-
+ 
 class TestCoursesWithMock(TestCase):
     fixtures = (
         "authapp/fixtures/001_user_admin.json",
@@ -128,8 +127,7 @@ class TestCoursesWithMock(TestCase):
             mocked_cache.return_value = pickle.load(inpf)
             result = self.client.get(path)
             self.assertEqual(result.status_code, HTTPStatus.OK)
-            self.assertTrue(mocked_cache.called)
-
+            self.assertTrue(mocked_cache.called)    
 
 class TestTaskMailSend(TestCase):
     fixtures = ("authapp/fixtures/001_user_admin.json",)
@@ -139,7 +137,6 @@ class TestTaskMailSend(TestCase):
         user_obj = authapp_models.CustomUser.objects.first()
         mainapp_tasks.send_feedback_mail({"user_id": user_obj.id, "message": message_text})
         self.assertEqual(django_mail.outbox[0].body, message_text)
-
 
 class TestNewsSelenium(StaticLiveServerTestCase):
 
@@ -157,8 +154,8 @@ class TestNewsSelenium(StaticLiveServerTestCase):
         button_enter = WebDriverWait(self.selenium, 5).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, '[type="submit"]'))
         )
-        self.selenium.find_element("id", "id_username").send_keys("admin")
-        self.selenium.find_element("id", "id_password").send_keys("admin")
+        self.selenium.find_element_by_id("id_username").send_keys("admin")
+        self.selenium.find_element_by_id("id_password").send_keys("admin")
         button_enter.click()
         # Wait for footer
         WebDriverWait(self.selenium, 5).until(EC.visibility_of_element_located((By.CLASS_NAME, "mt-auto")))
@@ -196,4 +193,4 @@ class TestNewsSelenium(StaticLiveServerTestCase):
     def tearDown(self):
         # Close browser
         self.selenium.quit()
-        super().tearDown()  
+        super().tearDown()

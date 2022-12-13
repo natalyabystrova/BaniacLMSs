@@ -63,7 +63,6 @@ class CoursesListView(TemplateView):
         context["objects"] = mainapp_models.Courses.objects.all()[:7]
         return context
 
-
 class CoursesDetailView(TemplateView):
     template_name = "mainapp/courses_detail.html"
 
